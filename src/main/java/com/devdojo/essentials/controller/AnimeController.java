@@ -1,6 +1,8 @@
 package com.devdojo.essentials.controller;
 
 import com.devdojo.essentials.domain.Anime;
+import com.devdojo.essentials.requests.AnimePostRequestBody;
+import com.devdojo.essentials.requests.AnimePutRequestBody;
 import com.devdojo.essentials.service.AnimeService;
 import com.devdojo.essentials.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
@@ -34,20 +36,22 @@ public class AnimeController {
     }
 
     @PostMapping
-    public ResponseEntity<Anime> save(@RequestBody Anime anime){
-        log.info("Cadastrando novo anime: "+anime.getName());
-        return new ResponseEntity<Anime>(animeService.save(anime),HttpStatus.CREATED);
+    public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animePostRequestBody){
+        log.info("Cadastrando novo anime: "+animePostRequestBody.getName());
+        return new ResponseEntity<Anime>(animeService.save(animePostRequestBody),HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Anime> replace (@RequestBody Anime anime){
-        animeService.replace(anime);
-        return new ResponseEntity<Anime>(anime, HttpStatus.OK);
+    public ResponseEntity replace (@RequestBody AnimePutRequestBody animePutRequestBody){
+        animeService.replace(animePutRequestBody);
+        log.info("Substituindo anime id " + animePutRequestBody.getId());
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable long id){
         animeService.delete(id);
+        log.info("Deletando anime id " + id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
